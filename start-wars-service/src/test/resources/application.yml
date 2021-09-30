@@ -1,0 +1,7 @@
+project:
+  name: startwars-service-test
+  version: 1.0.0
+
+api:
+  sw:
+    url: https://sw.local.test/api

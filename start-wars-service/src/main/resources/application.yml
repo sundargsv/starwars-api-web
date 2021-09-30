@@ -1,0 +1,14 @@
+project:
+  name: @project.artifactId@
+  version: @project.version@
+
+server:
+  port: 8080
+  error:
+    include-message: always
+
+api:
+  sw:
+    url: https://swapi.dev/api
+
+

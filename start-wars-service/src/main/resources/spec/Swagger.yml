@@ -1,0 +1,181 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Star Wars API Service
+servers:
+  - url: http://localhost:8080/starwars
+paths:
+  /version:
+    get:
+      summary: Get the version of the star wars service or a health check api
+      operationId: getVersion
+      tags:
+        - Health
+      responses:
+        '200':
+          description: A version check API to get the app name and version
+          headers:
+            xb3-trace-id:
+              description: A trace/ correlation ID of a request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        '500':
+          description:  Error in retrieving version data of the API service
+          headers:
+            xb3-trace-id:
+              description: A trace/ correlation ID of a request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /details:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - Star Wars
+      parameters:
+        - name: type
+          in: query
+          description: The Type of star wars entity
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Name of the search entity
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description:  Star Wars movie details by resource Type and name of the resource item
+          headers:
+            xb3-trace-id:
+              description: A trace/ correlation ID of a request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StarWarsResponse"
+        '400':
+          description:  Bad Request
+          headers:
+            xb3-trace-id:
+              description: A trace/ correlation ID of a request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description:  The requested data not found for the given resource type and name.
+          headers:
+            xb3-trace-id:
+              description: A trace/ correlation ID of a request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description:  Error in fetching data for the given resource type and name.
+          headers:
+            xb3-trace-id:
+              description: A trace/ correlation ID of a request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Project:
+      type: object
+      required:
+        - name
+        - version
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+    StarWarsResponse:
+      type: object
+      properties:
+        type:
+          type: string
+        count:
+          type: integer
+          format: int64
+        name:
+          type: string
+        films:
+          type: array
+          items:
+            $ref: "#/components/schemas/StarWarsFilmResponse"
+    StarWarsFilmResponse:
+      type: object
+      properties:
+        title:
+          type: string
+        episodeId:
+          type: integer
+          format: int32
+        openingCrawl:
+          type: string
+        director:
+          type: string
+        producer:
+          type: string
+        releaseDate:
+          type: string
+        characters:
+          type: array
+          items:
+            type: string
+        planets:
+          type: array
+          items:
+            type: string
+        starships:
+          type: array
+          items:
+            type: string
+        vehicles:
+          type: array
+          items:
+            type: string
+        species:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+        edited:
+          type: string
+    Error:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
